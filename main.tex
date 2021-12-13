@@ -1,0 +1,347 @@
+% Computational Social Intelligence (H) AE Report written in LaTeX by Inesh Bose
+
+\documentclass[12pt,a4paper]{article}
+
+
+%==============================================================================
+%% Packages and Command Setting
+\usepackage[a4paper,margin=2.0cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{biblatex}
+\usemintedstyle{friendly}
+\newcommand{\code}[1]{\texttt{#1}}
+\newenvironment{codelst}{\captionsetup{type=listing}}{}
+
+\addbibresource{references.bib}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1.2em}
+
+
+%==============================================================================
+%% Title Page
+
+\title{%
+    {\Large Computational Social Intelligence (H) \par}
+    {\Huge Assessed Exercise \par}
+}
+\author{\bf Inesh Bose}
+\date{}
+
+\begin{document}
+
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+
+\maketitle
+
+\pagenumbering{gobble}
+
+
+%==============================================================================
+%% Part 1
+
+\section*{Part 1}
+
+\subsection*{Is the number of laughter events higher for women than for men?}
+
+\textbf{Research Hypothesis:} The number of laughter events is higher for women than for men.\newline
+\textbf{Null Hypothesis:} The number of laughter events for women and men are the same.
+
+The data tells us that out of 120 speakers, 57 are male and 63 are female - that is 47.5\% and 52.5\% respectively. Using this percentage, we expect there to be 399.95 and 442.05 laughter events for male and female speakers respectively. However, the observed events for male speakers are 346 and 496 for female speakers.
+
+The hypothesis was tested using the Chi Square that would test whether there is a matching between the observations and the expectations. The degree of freedom is 1, and significance level 0.01; this means that our critical point is 6.63. On calculating the value, we get 13.86, therefore we can reject the null hypothesis and verify our research hypothesis.
+
+\subsection*{Is the number of laughter events higher for callers than for receivers?}
+
+\textbf{Research hypothesis:} The number of laughter events is higher for callers than for receivers.\newline
+\textbf{Null hypothesis:} The number of laughter events for callers and receivers are the same.
+
+There are equal number of callers and receivers from 120 speakers -- 60. Therefore, the expected number of laughter events for both roles is 421, but the observed events for callers is 505 and for receivers it is 337.
+
+Similar to the previous hypothesis, this was tested using the Chi Square with the same degree of freedom (1) and significance level (0.01) yielding the value 33.52 which is higher than 6.63, hence rejecting the null hypothesis and proving that the number of laughter events is higher for callers than for receivers.
+
+\subsection*{Are laughter events longer for women?}
+
+\textbf{Research hypothesis:} Laughter events are longer for women.\newline
+\textbf{Null hypothesis:} The duration of laughter events for women and men are the same.
+
+Student's t test was used to test the null hypothesis. This would use the mean and variance of the data. The total duration of laughter events for men is 209.75 and for female 352.00. The mean for male and female is 0.6 and 0.7 respectively, and the variance is 0.16 for men, and 0.19 for women.
+
+Our t value comes to be 3.51 which is greater than 2.36, so the research hypothesis can be verified and null hypothesis rejected.
+
+\subsection*{Are laughter events longer for callers?}
+
+\textbf{Research hypothesis:} Laughter events are longer for callers.\newline
+\textbf{Null hypothesis:} The duration of laughter events for callers and receivers are the same.
+
+This hypothesis was, again, tested with Student's t. The mean for callers laughter events duration is 0.74, while it is 0.54 for receivers. The variance for callers is 0.21 and for receivers it is 0.11.
+
+The null hypothesis gets rejected because the t value is 7.05 which is greater than 2.36, therefore laughter events are longer for callers.
+
+\newpage
+
+%==============================================================================
+%% Part 2
+
+\section*{Part 2}
+
+\subsection*{Facial Expression Analysis}
+
+Facial Expressions can analysed by action units (AU) that correspond to the action of one or more facial muscles.
+
+\subsection*{Gaussian Discriminant Functions}
+
+Data can be classified (accurately) using discriminant functions. We follow Bayes Decision Rule that follows Prior Probability Decision Rule \cite{MLAIVP}.
+
+\subsection*{Experiment}
+
+The function was setup using \code{numpy} and required the vector, likelihood and deviation. Both files, \code{training-part-2.csv} and \code{test-part-2.csv} where tested where likelihoods were calculated by the sum of the action units divided by the number of data.
+
+\subsection*{Results}
+
+The predictions were made by comparing the result of the functions (if a record was more of a frown or a smile). \code{training-part-2.csv} had an error rate of 2.78\% (predicted frown in record 34 instead of smile) and \code{test-part-2.csv} had 0\%.
+
+\printbibliography
+
+\newpage
+
+%==============================================================================
+%% Appendix
+
+\section*{Appendix}
+
+\vspace{3cm}
+
+\begin{listing}[h]
+
+\[{\chi}^2=\sum_{i=1}^{n} \frac{(O_i - E_i)^2}{E_i}\]
+\caption{The Chi Square}
+
+\end{listing}
+
+\vspace{2cm}
+
+\begin{listing}[h]
+
+\[t = \frac{\overline{h}_{1}  - \overline{h}_{2}}{\sqrt{\frac{s_{1}^{2}}{N_{1}} + \frac{s_{2}^{2}}{N_{2}}}}\]
+\caption{Student's t}
+
+\end{listing}
+
+\vspace{2cm}
+
+\begin{listing}[h]
+
+\[\log p\left ( \overrightarrow{x}|C_{k} \right ) = -\sum_{i=1}^{D}\left [ \log \sqrt{2\pi\sigma_{ik}} + \frac{\left ( x_{i} - \mu _{ik}  \right )^{2}}{2\sigma^{2}_{ik}} \right ]\]
+\caption{Gaussian Discriminant Function}
+
+\end{listing}
+
+\begin{listing}[h]
+\begin{minted}[tabsize=5,bgcolor=bg]{python}
+events = len(laughter_corpus)
+speakers = 120
+male = 57
+female = 63
+
+expected_male_events = (male/speakers) * events
+expected_female_events = (female/speakers) * events
+
+actual_male_events = len(laughter_corpus.query("Gender == 'Male'"))
+actual_female_events = len(laughter_corpus.query("Gender == 'Female'"))
+
+mf_chi_square = (
+    (
+        ((actual_male_events - expected_male_events)**2)
+        / expected_male_events
+    )
+    + (
+        ((actual_female_events - expected_female_events)**2)
+        / expected_female_events
+    )
+)
+
+print_md(
+f"""
+### Null hypothesis {
+    "can be rejected" if abs(mf_chi_square) > 6.63 else "is true"
+}.
+"""
+)
+\end{minted}
+\caption{Part 1, Question 1}
+\end{listing}
+
+
+\begin{listing}[h]
+\begin{minted}[tabsize=5,bgcolor=bg]{python}
+events = len(laughter_corpus)
+callers = 60
+receivers = 60
+
+expected_caller_events = (callers/(callers+receivers)) * events
+expected_receiver_events = (receivers/(callers+receivers)) * events
+
+actual_caller_events = len(laughter_corpus.query("Role == 'Caller'"))
+actual_receiver_events = len(laughter_corpus.query("Role == 'Receiver'"))
+
+cr_chi_square = (
+    (
+        ((actual_caller_events - expected_caller_events)**2)
+        / expected_caller_events
+    )
+    + (
+        ((actual_receiver_events - expected_receiver_events)**2)
+        / expected_receiver_events
+    )
+)
+
+print_md(
+f"""
+### Null hypothesis {
+    "can be rejected" if abs(cr_chi_square) > 6.63 else "is true"
+}.
+"""
+)
+\end{minted}
+\caption{Part 1, Question 2}
+\end{listing}
+
+
+\begin{listing}[h]
+\begin{minted}[tabsize=5,bgcolor=bg]{python}
+male_duration = laughter_corpus.query("Gender == 'Male'")["Duration"]
+female_duration = laughter_corpus.query("Gender == 'Female'")["Duration"]
+
+mean_male_duration = male_duration.mean()
+mean_female_duration = female_duration.mean()
+
+variance_male_duration = male_duration.var()
+variance_female_duration = female_duration.var()
+
+mf_t_value = (
+    (mean_male_duration - mean_female_duration)
+    / (
+        (variance_male_duration / len(male_duration))
+        + (variance_female_duration / len(female_duration))
+    )**(1/2)
+)
+
+print_md(
+f"""
+### Null hypothesis {
+    "can be rejected" if abs(mf_t_value) > 2.36 else "is true"
+}.
+"""
+)
+\end{minted}
+\caption{Part 1, Question 3}
+\end{listing}
+
+
+\begin{listing}[h]
+\begin{minted}[tabsize=5,bgcolor=bg]{python}
+caller_duration = laughter_corpus.query("Role == 'Caller'")["Duration"]
+receiver_duration = laughter_corpus.query("Role == 'Receiver'")["Duration"]
+
+mean_caller_duration = caller_duration.mean()
+mean_receiver_duration = receiver_duration.mean()
+
+variance_caller_duration = caller_duration.var()
+variance_receiver_duration = receiver_duration.var()
+
+cr_t_value = (
+    (mean_caller_duration - mean_receiver_duration)
+    / (
+        (variance_caller_duration / len(caller_duration))
+        + (variance_receiver_duration / len(receiver_duration))
+    )**(1/2)
+)
+
+print_md(
+f"""
+### Null hypothesis {
+    "can be rejected" if abs(cr_t_value) > 2.36 else "is true"
+}.
+"""
+)
+\end{minted}
+\caption{Part 1, Question 4}
+\end{listing}
+
+
+\begin{listing}[h]
+\begin{minted}[tabsize=5,bgcolor=bg]{python}
+def gaussian_discriminant_function(vector, likelihood, deviation):
+    return -np.sum(
+        np.log(
+            np.sqrt(2 * np.pi) * deviation
+        )
+        + (
+            (
+                (vector.to_numpy()[:-1] - likelihood.to_numpy())**2
+            )
+            /(2 * (deviation**2))
+        )
+    )
+
+index = enum(SMILE=0, FROWN=1)
+\end{minted}
+\caption{Part 2 (1/2)}
+\end{listing}
+
+\begin{listing}[h]
+\begin{minted}[tabsize=5,bgcolor=bg]{python}
+for f in ["training-part-2.csv", "test-part-2.csv"]:
+    file_to_test = pd.read_csv(f)
+    likelihoods = [
+        (
+            file_to_test.query(f"Class == '{c}'").sum(numeric_only=True)
+            / len(file_to_test.query(f"Class == '{c}'"))
+        )
+        for c in ["smile", "frown"]
+    ]
+    standard_deviation = file_to_test.std()
+
+    predictions = [
+        (
+            "smile"
+            if (
+                gaussian_discriminant_function(
+                    vector, likelihoods[index.SMILE], standard_deviation
+                )
+                > gaussian_discriminant_function(
+                    vector, likelihoods[index.FROWN], standard_deviation
+                )
+            )
+            else "frown"
+        ) for vector in file_to_test.iloc
+    ]
+
+    print_md(
+f"""
+### The error rate of the prediction for `{f}` is {
+    round(
+        (1 - difflib.SequenceMatcher(
+            None, predictions, list(file_to_test["Class"])).ratio()
+        ) * 100, 2,
+    )
+}%.
+|   | Prediction | Actual |
+| - | ---------- | ------ |
+"""
++ "\n".join(
+    f"""| **{index}** | {(
+        prediction if prediction == actual else f'_**{prediction}**_'
+    )} | {actual} |"""
+    for index, (prediction, actual) in enumerate(
+        zip(predictions, list(file_to_test["Class"]))
+    )
+))
+\end{minted}
+\caption{Part 2 (2/2)}
+\end{listing}
+
+\end{document}
